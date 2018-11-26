@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">smartRing</string>
+    <string name="google_maps_API_Key">AIzaSyD0qD2aUN8KOSMUaNnyz0KMQpTOeuPuH50</string>
 </resources>
