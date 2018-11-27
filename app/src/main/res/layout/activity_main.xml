@@ -7,9 +7,25 @@
     tools:context=".MainActivity">
 
     <Button
+        android:id="@+id/btnMap"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
         android:text="Map"
-        android:id="@+id/btnMap"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnONOFF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:layout_marginLeft="60dp"
+        android:text="ON/OF"
+        app:layout_constraintBaseline_toBaselineOf="@+id/btnMap"
+        app:layout_constraintStart_toEndOf="@+id/btnMap" />
+
 
 </android.support.constraint.ConstraintLayout>

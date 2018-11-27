@@ -1,5 +1,6 @@
 package com.example.rb25788.smartring;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     public static final int ERROR_DIALOG_REQUEST = 9001;
+    private BluetoothAdapter bluetoothAdapter;
 
 
     @Override
@@ -36,6 +38,19 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        Button btnOnOff = (Button) findViewById(R.id.btnONOFF);
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        btnOnOff.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                enableDisableGps();
+            }
+        });
+    }
+
+    private void enableDisableGps() {
+
     }
 
     public boolean isServiceOk() {
