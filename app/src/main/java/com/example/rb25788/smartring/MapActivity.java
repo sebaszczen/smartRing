@@ -35,7 +35,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public static final String ACCESS_FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     public static final int LOCATION_PERMISSSION_REQUEST_CODE = 1234;
     public static final int GPS_ENABLE_CODE = 123;
-    private boolean mLocationPermissionGranted = false;
+    public static boolean mLocationPermissionGranted = false;
     private GoogleMap mMap;
     private FusedLocationProviderClient mfusedLocationProviderClient;
     public static final float DEFAUL_ZOOM = 15f;
