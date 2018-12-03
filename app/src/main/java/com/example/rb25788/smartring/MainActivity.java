@@ -14,6 +14,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -25,7 +27,7 @@ import com.google.android.gms.common.api.GoogleApi;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnItemClickListener {
 
     private static final String TAG = "MainActivity";
     public static final int ERROR_DIALOG_REQUEST = 9001;
@@ -68,6 +70,9 @@ public class MainActivity extends AppCompatActivity {
         btnDisableEnable_Discoverable = (Button) findViewById(R.id.btnDiscoverable_ONOFF);
         lvNewDevices=(ListView) findViewById(R.id.lvNewDevices);
         bluetoothDevicesList = new ArrayList<>();
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
+        registerReceiver(mBroadcastReveiver4, filter);
+        lvNewDevices.setOnItemClickListener(MainActivity.this);
     }
 
     private void enableDisableBluetooth() {
@@ -159,11 +164,33 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private final BroadcastReceiver mBroadcastReveiver4 =new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if (action.equals(BluetoothDevice.ACTION_BOND_STATE_CHANGED)) {
+                BluetoothDevice mDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                if (mDevice.getBondState() == BluetoothDevice.BOND_BONDED) {
+                    Log.d(TAG, "BroadcastReceiver: BOND_BONDED");
+                }
+                if (mDevice.getBondState() == BluetoothDevice.BOND_BONDING) {
+                    Log.d(TAG, "BroadcastReceiver: BOND_BONDING");
+                }
+                if (mDevice.getBondState() == BluetoothDevice.BOND_NONE) {
+                    Log.d(TAG, "BroadcastReceiver: BOND_NONE");
+                }
+            }
+        }
+    };
+
     @Override
     protected void onDestroy() {
         Log.d(TAG, "on destroy called");
         super.onDestroy();
         unregisterReceiver(mBroadcastReveiver);
+        unregisterReceiver(mBroadcastReveiver2);
+        unregisterReceiver(mBroadcastReveiver3);
+        unregisterReceiver(mBroadcastReveiver4);
     }
 
     public boolean isServiceOk() {
@@ -235,5 +262,19 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "getPermissions: No need to check permissions, SDK version< LOLIPOP");
         }
 
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        bluetoothAdapter.cancelDiscovery();
+        Log.d(TAG, "onItemClick: You clicked on a device");
+        String deviceName = bluetoothDevicesList.get(position).getName();
+        String deviceAdress = bluetoothDevicesList.get(position).getAddress();
+        Log.d(TAG, "onItemClick: device name= " + deviceName);
+        Log.d(TAG, "onItemClick: device adress= " + deviceAdress);
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            Log.d(TAG, "Trying to pair with: " + deviceName);
+            bluetoothDevicesList.get(position).createBond();
+        }
     }
 }
