@@ -144,37 +144,17 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private final BroadcastReceiver mBroadcastReveiver3 = new BroadcastReceiver() {
+    private final BroadcastReceiver mBroadcastReveiver3 =new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            Log.d(TAG, "onReceive: Action found");
-            //when dicvovery finds a device
+            final String action = intent.getAction();
+            Log.d(TAG, "on receive: action found");
             if (action.equals(BluetoothDevice.ACTION_FOUND)) {
-                BluetoothDevice bluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                bluetoothDevicesList.add(bluetoothDevice);
-                Log.d(TAG, "onReceive: device name= " + bluetoothDevice.getName() + ": device adress= " + bluetoothDevice.getAddress());
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                bluetoothDevicesList.add(device);
+                Log.d(TAG, "on receive: device name= " + device.getName() + " device adress= " + device.getAddress());
                 deviceListAdapter = new DeviceListAdapter(context, R.layout.device_adapter_view, (ArrayList<BluetoothDevice>) bluetoothDevicesList);
-
-
-                final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, bluetoothAdapter.ERROR);
-                switch (state) {
-                    case BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE:
-                        Log.d(TAG, "mBroadcastReceiver2: Discoverablity enabled");
-                        break;
-                    case BluetoothAdapter.SCAN_MODE_CONNECTABLE:
-                        Log.d(TAG, "mBroadcastReceiver2: Discoverablity disabled. Able to receive connections");
-                        break;
-                    case BluetoothAdapter.SCAN_MODE_NONE:
-                        Log.d(TAG, "mBroadcastReceiver2: Discoverablity disabled. Not able do receive conenctions");
-                        break;
-                    case BluetoothAdapter.STATE_CONNECTING:
-                        Log.d(TAG, "mBroadcastReceiver2: CONNECTING...");
-                        break;
-                    case BluetoothAdapter.STATE_CONNECTED:
-                        Log.d(TAG, "mBroadcastReceiver2: CONNECTED.");
-                        break;
-                }
+                lvNewDevices.setAdapter(deviceListAdapter);
             }
         }
     };
